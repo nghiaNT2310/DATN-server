@@ -19,6 +19,9 @@ const messagechema = new Schema(
     parentMessageId: {
       type: Schema.Types.ObjectId,
     },
+    urlSource: {
+      type: String,
+    },
   },
   {
     timestamps: true,

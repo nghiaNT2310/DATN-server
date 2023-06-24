@@ -9,14 +9,22 @@ const {
   addFriendController,
   getFriends,
   exploreUser,
+  getFriendId,
 } = require("../controllers/FriendController");
 const { hashPassword } = require("../middlewares/hash");
 const { handleError } = require("../middlewares/handleError");
 const { authenticate } = require("../middlewares/authenticate");
 const messageController = require("../controllers/MessageController");
 const notificationController = require("../controllers/NotificationController");
-
+const OVController = require("../controllers/OVController");
+const FirebaseController = require("../controllers/firebaseController");
 const router = express.Router();
+
+router.get("/friend", getFriendId);
+
+router.post("/api/sessions", OVController.CreateSessionId);
+
+router.post("/api/sessions/:sessionId/connections", OVController.CreateSession);
 
 router.post("/signup", hashPassword, register);
 
@@ -59,6 +67,10 @@ router.get(
 );
 
 router.get("/group-user/:groupId", authenticate, getListFriendNotInGroup);
+
+router.post("/avatar", FirebaseController.uploadFile);
+
+router.get("/avatar", FirebaseController.getLinkDownload);
 
 router.use(handleError);
 

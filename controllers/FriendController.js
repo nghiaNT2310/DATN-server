@@ -1,4 +1,8 @@
-const { addFriend, unFriend } = require("../services/FriendService");
+const {
+  addFriend,
+  unFriend,
+  getFriendsId,
+} = require("../services/FriendService");
 const {
   getListFriendById,
   getListUserNotFriend,
@@ -20,4 +24,13 @@ async function exploreUser(req, res, next) {
   res.send(data);
 }
 
-module.exports = { addFriendController, getFriends, exploreUser };
+async function getFriendId(req, res, next) {
+  try {
+    const data = await getFriendsId(req.query.id1, req.query.id2);
+    res.send(data[0]._id);
+  } catch (err) {
+    res.send(err);
+  }
+}
+
+module.exports = { addFriendController, getFriends, exploreUser, getFriendId };

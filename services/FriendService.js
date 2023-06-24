@@ -230,6 +230,30 @@ async function getListFriendNotInGroup({ userId, groupId }) {
   });
 }
 
+async function getFriendsId(firstUserId, secondUserId) {
+  try {
+    const friend = await Friend.aggregate([
+      {
+        $match: {
+          $or: [
+            {
+              firstUserId: new mongoose.Types.ObjectId(firstUserId),
+              secondUserId: new mongoose.Types.ObjectId(secondUserId),
+            },
+            {
+              firstUserId: new mongoose.Types.ObjectId(secondUserId),
+              secondUserId: new mongoose.Types.ObjectId(firstUserId),
+            },
+          ],
+        },
+      },
+    ]);
+    return friend;
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   addFriend,
   unFriend,
@@ -239,4 +263,5 @@ module.exports = {
   acceptFriend,
   findByFirstUserAndSecondUser,
   getListFriendNotInGroup,
+  getFriendsId,
 };

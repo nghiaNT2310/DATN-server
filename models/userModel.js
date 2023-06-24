@@ -19,6 +19,10 @@ const userSchema = new Schema(
     socketId: {
       type: String,
     },
+    avatar: {
+      type: String,
+      default: "../../assets/avata.svg",
+    },
   },
   {
     timestamps: true,
