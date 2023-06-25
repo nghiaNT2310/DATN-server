@@ -1,9 +1,15 @@
 const express = require("express");
-const { register, login, getInfo } = require("../controllers/UserController");
+const {
+  register,
+  login,
+  getInfo,
+  getInfoFriend,
+} = require("../controllers/UserController");
 const {
   createNewGroup,
   addUser,
   getListFriendNotInGroup,
+  getGroupInfo,
 } = require("../controllers/GroupController");
 const {
   addFriendController,
@@ -31,6 +37,8 @@ router.post("/signup", hashPassword, register);
 router.post("/signin", login);
 
 router.post("/group", authenticate, createNewGroup);
+
+router.get("/info/friend/:id", getInfoFriend);
 
 router.post("/usergroup", addUser); // will remove
 
@@ -71,6 +79,8 @@ router.get("/group-user/:groupId", authenticate, getListFriendNotInGroup);
 router.post("/avatar", FirebaseController.uploadFile);
 
 router.get("/avatar", FirebaseController.getLinkDownload);
+
+router.get("/group/:id", getGroupInfo);
 
 router.use(handleError);
 

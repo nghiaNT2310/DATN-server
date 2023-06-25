@@ -11,6 +11,7 @@ module.exports = (io, socket) => {
       creator: data.creator,
       isActive: true,
     });
+    console.log(response);
 
     await GroupService.addUserToGroup({
       userId: data.creator,
@@ -23,6 +24,7 @@ module.exports = (io, socket) => {
       establishAt: response.createdAt,
       isGroup: true,
       isActive: response.isActive,
+      avatar: response.avatar,
     });
   };
 

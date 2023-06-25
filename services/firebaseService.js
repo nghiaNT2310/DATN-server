@@ -14,14 +14,13 @@ const {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-async function uploadFile(file) {
+async function uploadFile(name, file, contentType = "image/jpeg") {
   try {
-    const storageRef = ref(storage, file.name);
+    const storageRef = ref(storage, name);
     const metadata = {
-      contentType: "image/jpeg",
+      contentType: contentType,
     };
-    const res = await uploadBytes(storageRef, file.data, metadata);
-    console.log(res);
+    const res = await uploadBytes(storageRef, file, metadata);
   } catch (err) {
     throw err;
   }

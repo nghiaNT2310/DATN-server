@@ -4,16 +4,20 @@ const FriendService = require("../services/FriendService");
 
 module.exports = (io, socket) => {
   const addNotification = async ({ sender, receiver }) => {
+    const receiverInfo = await UserService.getInfoByUserId(receiver);
+    const senderInfo = await UserService.getInfoByUserId(sender);
     await NotificationService.AddNotification({
       sender,
       receiver,
       type: 1,
+      avatar: senderInfo.avatar,
     });
 
     await NotificationService.AddNotification({
       sender,
       receiver,
       type: 2,
+      avatar: receiverInfo.avatar,
     });
 
     await FriendService.addFriend({
@@ -33,7 +37,7 @@ module.exports = (io, socket) => {
       type: 2,
       isActive: true,
     });
-    const receiverInfo = await UserService.getInfoByUserId(receiver);
+
     if (receiverInfo.isActive) {
       io.to(receiverInfo.socketId).emit("notification-add-friend", no1);
     }
@@ -167,6 +171,7 @@ module.exports = (io, socket) => {
         establishAt: friend.updatedAt,
         isGroup: false,
         isActive: receiverInfo.isActive,
+        avatar: receiverInfo.avatar,
       });
     }
     socket.emit("notification-add-friend-cancel", no1);
@@ -176,6 +181,7 @@ module.exports = (io, socket) => {
       establishAt: friend.updatedAt,
       isGroup: false,
       isActive: senderInfo.isActive,
+      avatar: senderInfo.avatar,
     });
   };
 

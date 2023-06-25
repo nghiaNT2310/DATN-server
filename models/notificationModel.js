@@ -19,6 +19,9 @@ const notificationSchema = new Schema(
     message: {
       type: String,
     },
+    avatar: {
+      type: String,
+    },
   },
   {
     timestamps: true,

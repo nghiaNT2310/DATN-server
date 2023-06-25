@@ -3,7 +3,11 @@ const fileBaseService = require("../services/firebaseService");
 async function uploadFile(req, res, next) {
   try {
     console.log(req.files.image);
-    await fileBaseService.uploadFile(req.files.image);
+    await fileBaseService.uploadFile(
+      req.files.image.name,
+      req.files.image.data,
+      req.files.image.mimetype
+    );
     res.send("oks");
   } catch (err) {
     console.log(err);

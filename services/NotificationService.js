@@ -2,8 +2,7 @@ const Notification = require("../models/notificationModel");
 const mongoose = require("mongoose");
 const UserService = require("../services/UserService");
 
-async function AddNotification({ sender, receiver, type }) {
-  console.log("c:", sender, receiver);
+async function AddNotification({ sender, receiver, type, avatar }) {
   const userSender = await UserService.getInfoByUserId(sender);
   const userReceiver = await UserService.getInfoByUserId(receiver);
   const messageContent =
@@ -15,6 +14,7 @@ async function AddNotification({ sender, receiver, type }) {
     receiver,
     type,
     message: messageContent,
+    avatar: avatar,
   });
 }
 

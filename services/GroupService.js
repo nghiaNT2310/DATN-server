@@ -59,6 +59,7 @@ async function getGroupByUserId(id) {
           groupId: "$groupId",
           isActive: "$group.isActive",
           createdGroupAt: "$group.updatedAt",
+          avatar: "$group.avatar",
         },
       },
     ]);
@@ -128,6 +129,16 @@ async function getUserOfGroupExceptOwnerRequest({ groupId, userId }) {
   return users;
 }
 
+async function setAvatar(id, url) {
+  const res = await User.findByIdAndUpdate(id, { avatar: url });
+  return res;
+}
+
+async function getById(id) {
+  const group = await Group.findById(id);
+  return group;
+}
+
 module.exports = {
   createGroup,
   addUserToGroup,
@@ -137,4 +148,6 @@ module.exports = {
   addManyUserToGroup,
   getGroupById,
   getUserOfGroupExceptOwnerRequest,
+  setAvatar,
+  getById,
 };

@@ -98,6 +98,10 @@ async function updateSocketId(userId, socketId) {
   );
 }
 
+async function setAvatar(id, url) {
+  await User.findByIdAndUpdate(id, { avatar: url });
+}
+
 module.exports = {
   createUser,
   findUserByUserName,
@@ -105,4 +109,5 @@ module.exports = {
   getAssociateId,
   updateSocketId,
   getInfoUserInIds,
+  setAvatar,
 };

@@ -95,6 +95,7 @@ async function getListMessageFriendOfUser(userId) {
       isGroup: false,
       id: lstFriend[i].friendId,
       establishAt: lstFriend[i].friendAt,
+      avatar: lstFriend[i].avatar,
     };
   }
   return overviewMessageToFriend;
@@ -151,6 +152,7 @@ async function getListMessageGroupOfUser(userId) {
       id: lstGroup[i].groupId,
       isGroup: true,
       establishAt: lstGroup[i].createdGroupAt,
+      avatar: lstGroup[i].avatar,
     };
   }
   return messages;
@@ -243,6 +245,7 @@ async function getMessageByFriendId(userId, friendId) {
         createdAt: "$createdAt",
         subject: "$subject",
         creator: "$creator.username",
+        avatar: "$creator.avatar",
       },
     },
     {
@@ -301,6 +304,7 @@ async function getMessageByGroupId(userId, groupId) {
         createdAt: "$createdAt",
         subject: "$subject",
         creator: "$creator.username",
+        avatar: "$creator.avatar",
       },
     },
     {
@@ -363,6 +367,7 @@ async function getFirstOfGroup({ groupId, userId }) {
     id: group._id,
     isGroup: true,
     establishAt: userGroup.createdAt,
+    avatar: group.avatar,
   };
 }
 
@@ -442,6 +447,7 @@ async function getNewMessageFriendForChatContainer({
         createdAt: "$createdAt",
         subject: "$subject",
         creator: "$creator.username",
+        avatar: "$creator.avatar",
       },
     },
     {
@@ -510,6 +516,7 @@ async function getNewMessageFriendForUserGroup({ sender, receiver }) {
     isActive: senderInfo.isActive,
     isGroup: false,
     id: senderInfo._id,
+    avatar: senderInfo.avatar,
   };
 }
 
@@ -560,6 +567,7 @@ async function getNewMessageGroupForChatContainer({ groupId }) {
         createdAt: "$createdAt",
         subject: "$subject",
         creator: "$creator.username",
+        avatar: "$creator.avatar",
       },
     },
     {

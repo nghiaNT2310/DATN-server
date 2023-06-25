@@ -21,7 +21,8 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: "../../assets/avata.svg",
+      default:
+        "https://firebasestorage.googleapis.com/v0/b/chat-f19b4.appspot.com/o/avata.svg?alt=media&token=f85eab3a-37e9-4b1e-b871-dc2cedf48b34",
     },
   },
   {

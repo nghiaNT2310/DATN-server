@@ -2,6 +2,7 @@ const {
   createGroup,
   addUserToGroup,
   removeUserFromGroup,
+  getById,
 } = require("../services/GroupService");
 const friendService = require("../services/FriendService");
 const { handleError } = require("../services/handleErrorService");
@@ -36,4 +37,14 @@ async function getListFriendNotInGroup(req, res, next) {
   res.send(lstUser);
 }
 
-module.exports = { createNewGroup, addUser, getListFriendNotInGroup };
+async function getGroupInfo(req, res, next) {
+  const data = await getById(req.params.id);
+  res.send(data);
+}
+
+module.exports = {
+  createNewGroup,
+  addUser,
+  getListFriendNotInGroup,
+  getGroupInfo,
+};

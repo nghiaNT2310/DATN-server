@@ -5,7 +5,14 @@ const MessageService = require("../services/MessageService");
 const GroupService = require("../services/GroupService");
 
 module.exports = (io, socket) => {
-  const sendMessageToUser = async ({ creator, messageBody, recipientId }) => {
+  const sendMessageToUser = async ({
+    creator,
+    messageBody,
+    recipientId,
+    isFile,
+    file,
+  }) => {
+    if (isFile) console.log(file);
     await MessageService.sentMessageToUser({
       creator,
       messageBody,
@@ -16,6 +23,7 @@ module.exports = (io, socket) => {
       firstUserId: creator,
       secondUserId: recipientId,
     });
+    const friend = await UserService.getInfoByUserId(recipientId);
 
     const messageUserGroup =
       await MessageService.getNewMessageFriendForUserGroup({
@@ -26,14 +34,14 @@ module.exports = (io, socket) => {
     socket.emit("new-message-chat-container", {
       chooseId: recipientId,
       isGroup: false,
-      message: message,
+      message: { ...message, avatar: friend.avatar },
     });
 
-    const friend = await UserService.getInfoByUserId(recipientId);
     socket.emit("new-message-side-bar", {
       ...messageUserGroup,
       id: recipientId,
       name: friend.username,
+      avatar: friend.avatar,
     });
 
     if (friend.isActive) {

@@ -87,6 +87,7 @@ async function getListFriendById(id) {
             isActive: "$friend.isActive",
             friendAt: "$friendAt",
             socketId: "$friend.socketId",
+            avatar: "$friend.avatar",
           },
         },
       ],
@@ -115,6 +116,7 @@ async function getListUserNotFriend(id, namefind) {
           $toString: "$_id",
         },
         username: 1,
+        avatar: 1,
       },
     },
     {

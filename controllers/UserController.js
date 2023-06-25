@@ -2,11 +2,13 @@ const {
   createUser,
   findUserByUserName,
   getInfoByUserId,
+  setAvatar,
 } = require("../services/UserService");
 const { handleError } = require("../services/handleErrorService");
 const { CODE_MESSAGE, respond } = require("../services/responseService");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const fileBaseService = require("../services/firebaseService");
 
 async function register(req, res, next) {
   try {
@@ -53,4 +55,9 @@ async function getInfo(req, res, next) {
   res.send(user);
 }
 
-module.exports = { register, login, getInfo };
+async function getInfoFriend(req, res, next) {
+  const user = await getInfoByUserId(req.params.id);
+  res.send(user);
+}
+
+module.exports = { register, login, getInfo, getInfoFriend };
