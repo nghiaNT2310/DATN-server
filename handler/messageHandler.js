@@ -3,6 +3,7 @@ const NotificationService = require("../services/NotificationService");
 const FriendService = require("../services/FriendService");
 const MessageService = require("../services/MessageService");
 const GroupService = require("../services/GroupService");
+const fileBaseService = require("../services/firebaseService");
 
 module.exports = (io, socket) => {
   const sendMessageToUser = async ({
@@ -11,12 +12,18 @@ module.exports = (io, socket) => {
     recipientId,
     isFile,
     file,
+    metadata,
   }) => {
-    if (isFile) console.log(file);
+    if (isFile) {
+      await fileBaseService.uploadFile(metadata.name, file, metadata.type);
+      const url = await fileBaseService.getUrl(metadata.name);
+      messageBody = url;
+    }
     await MessageService.sentMessageToUser({
       creator,
       messageBody,
       recipientId,
+      subject: isFile ? metadata.type : "text",
     });
 
     const message = await MessageService.getNewMessageFriendForChatContainer({
@@ -60,10 +67,16 @@ module.exports = (io, socket) => {
     messageBody,
     cecipientGroupId,
   }) => {
+    if (isFile) {
+      await fileBaseService.uploadFile(metadata.name, file, metadata.type);
+      const url = await fileBaseService.getUrl(metadata.name);
+      messageBody = url;
+    }
     await MessageService.sentMessageToGroup({
       creator,
       messageBody,
       cecipientGroupId,
+      subject: isFile ? metadata.type : "text",
     });
 
     const message = await MessageService.getNewMessageGroupForChatContainer({

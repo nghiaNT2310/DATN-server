@@ -7,10 +7,16 @@ const { getGroupByUserId } = require("./GroupService");
 const mongoose = require("mongoose");
 const User = require("../models/userModel");
 
-async function sentMessageToUser({ creator, messageBody, recipientId }) {
+async function sentMessageToUser({
+  creator,
+  messageBody,
+  recipientId,
+  subject = "text",
+}) {
   const message = await Message.create({
     creatorId: creator,
     messageBody: messageBody,
+    subject: subject,
   });
 
   await MessageRecipient.create({
@@ -20,7 +26,12 @@ async function sentMessageToUser({ creator, messageBody, recipientId }) {
   });
 }
 
-async function sentMessageToGroup({ creator, messageBody, cecipientGroupId }) {
+async function sentMessageToGroup({
+  creator,
+  messageBody,
+  cecipientGroupId,
+  subject = "text",
+}) {
   const message = await Message.create({
     creatorId: creator,
     messageBody: messageBody,
@@ -30,6 +41,7 @@ async function sentMessageToGroup({ creator, messageBody, cecipientGroupId }) {
     messageId: message._id,
     recipientGroupId: cecipientGroupId,
     isRead: false,
+    subject: subject,
   });
 }
 

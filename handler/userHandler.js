@@ -13,7 +13,7 @@ module.exports = (io, socket) => {
 
   const updateAvatar = async (data) => {
     try {
-      await fileBaseService.uploadFile(data.name, data.file);
+      await fileBaseService.uploadFile(data.name, data.file, data.type);
       const url = await fileBaseService.getUrl(data.name);
       await UserService.setAvatar(data.id, url);
       socket.emit("update-avatar");
