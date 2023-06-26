@@ -35,13 +35,13 @@ async function sentMessageToGroup({
   const message = await Message.create({
     creatorId: creator,
     messageBody: messageBody,
+    subject: subject,
   });
 
   await MessageRecipient.create({
     messageId: message._id,
     recipientGroupId: cecipientGroupId,
     isRead: false,
-    subject: subject,
   });
 }
 
