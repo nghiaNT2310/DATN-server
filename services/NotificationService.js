@@ -18,6 +18,23 @@ async function AddNotification({ sender, receiver, type, avatar }) {
   });
 }
 
+async function AddNotificationGroup({
+  sender,
+  receiver,
+  messageContent,
+  avatar,
+}) {
+  const userSender = await UserService.getInfoByUserId(sender);
+  const userReceiver = await UserService.getInfoByUserId(receiver);
+  await Notification.create({
+    sender,
+    receiver,
+    type,
+    message: messageContent,
+    avatar: avatar,
+  });
+}
+
 async function getListNotification(userId) {
   const notifications = await Notification.aggregate([
     {
@@ -33,6 +50,11 @@ async function getListNotification(userId) {
           },
         ],
         isActive: true,
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
       },
     },
   ]);

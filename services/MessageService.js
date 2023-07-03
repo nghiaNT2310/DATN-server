@@ -378,7 +378,7 @@ async function getFirstOfGroup({ groupId, userId }) {
     isActive: group.isActive,
     id: group._id,
     isGroup: true,
-    establishAt: userGroup.createdAt,
+    establishAt: userGroup ? userGroup.createdAt : null,
     avatar: group.avatar,
   };
 }

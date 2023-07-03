@@ -3,6 +3,7 @@ const {
   addUserToGroup,
   removeUserFromGroup,
   getById,
+  getUserOfGroupExceptOwnerRequest,
 } = require("../services/GroupService");
 const friendService = require("../services/FriendService");
 const { handleError } = require("../services/handleErrorService");
@@ -42,9 +43,22 @@ async function getGroupInfo(req, res, next) {
   res.send(data);
 }
 
+async function getListUserInGroupExceptOwnerRequest(req, res, next) {
+  try {
+    const data = await getUserOfGroupExceptOwnerRequest({
+      groupId: req.params.id,
+      userId: req.user.id,
+    });
+    res.send(data);
+  } catch (err) {
+    handleError(err);
+  }
+}
+
 module.exports = {
   createNewGroup,
   addUser,
   getListFriendNotInGroup,
   getGroupInfo,
+  getListUserInGroupExceptOwnerRequest,
 };

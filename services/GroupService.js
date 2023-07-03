@@ -123,6 +123,7 @@ async function getUserOfGroupExceptOwnerRequest({ groupId, userId }) {
         isActive: "$user.isActive",
         socketId: "$user.socketId",
         username: "$user.username",
+        avatar: "$user.avatar",
       },
     },
   ]);
@@ -139,6 +140,37 @@ async function getById(id) {
   return group;
 }
 
+async function deleteUserFromGroup({ ids, groupId }) {
+  try {
+    await UserGroup.deleteMany({
+      userId: {
+        $in: ids.map((id) => new mongoose.Types.ObjectId(id)),
+      },
+      groupId: new mongoose.Types.ObjectId(groupId),
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function leaveGroup({ ids, groupId }) {
+  try {
+    await UserGroup.updateMany(
+      {
+        userId: {
+          $in: ids.map((id) => new mongoose.Types.ObjectId(id)),
+        },
+        groupId: new mongoose.Types.ObjectId(groupId),
+      },
+      {
+        isActive: false,
+      }
+    );
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   createGroup,
   addUserToGroup,
@@ -150,4 +182,6 @@ module.exports = {
   getUserOfGroupExceptOwnerRequest,
   setAvatar,
   getById,
+  deleteUserFromGroup,
+  leaveGroup,
 };

@@ -10,6 +10,7 @@ const {
   addUser,
   getListFriendNotInGroup,
   getGroupInfo,
+  getListUserInGroupExceptOwnerRequest,
 } = require("../controllers/GroupController");
 const {
   addFriendController,
@@ -79,6 +80,12 @@ router.get("/group-user/:groupId", authenticate, getListFriendNotInGroup);
 router.post("/avatar", FirebaseController.uploadFile);
 
 router.get("/avatar", FirebaseController.getLinkDownload);
+
+router.get(
+  "/group/user/:id",
+  authenticate,
+  getListUserInGroupExceptOwnerRequest
+);
 
 router.get("/group/:id", getGroupInfo);
 

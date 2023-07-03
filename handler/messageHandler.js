@@ -208,8 +208,115 @@ module.exports = (io, socket) => {
     }
   };
 
+  //1 add 2 remove 3 leave
+  const manageGroup = async ({ creator, cecipientGroupId, ids, type }) => {
+    const users = await UserService.getInfoUserInIds(ids);
+    const creatorUser = await UserService.getInfoByUserId(creator);
+    let messageBody = "";
+    if (type == 1) {
+      const creatorName = creatorUser.username;
+      const lst = users.map((u) => u.username);
+      const name = lst.join(", ");
+      messageBody = `${creatorName} add ${name} to this conversation`;
+    } else if (type == 2) {
+      const creatorName = creatorUser.username;
+      const lst = users.map((u) => u.username);
+      const name = lst.join(", ");
+      messageBody = `${creatorName} remove ${name} to this conversation`;
+      await GroupService.deleteUserFromGroup({
+        ids,
+        groupId: cecipientGroupId,
+      });
+    } else {
+      const creatorName = creatorUser.username;
+      messageBody = `${creatorName} leave this conversation`;
+      await GroupService.deleteUserFromGroup({
+        ids: [creator],
+        groupId: cecipientGroupId,
+      });
+    }
+
+    //
+    await MessageService.sentMessageToGroup({
+      creator,
+      cecipientGroupId,
+      messageBody,
+      subject: "notification",
+    });
+
+    const message = await MessageService.getNewMessageGroupForChatContainer({
+      groupId: cecipientGroupId,
+    });
+
+    const messageUserGroupSender = await MessageService.getFirstOfGroup({
+      groupId: cecipientGroupId,
+      userId: creator,
+    });
+    socket.emit("new-message-chat-container", {
+      chooseId: cecipientGroupId,
+      isGroup: true,
+      message: message,
+    });
+
+    socket.emit("new-message-side-bar", messageUserGroupSender);
+
+    const usersExceptOwnerRequest =
+      await GroupService.getUserOfGroupExceptOwnerRequest({
+        groupId: cecipientGroupId,
+        userId: creator,
+      });
+
+    usersExceptOwnerRequest.forEach((user) => {
+      if (user.isActive) {
+        io.to(user.socketId).emit("new-message-chat-container", {
+          chooseId: cecipientGroupId,
+          isGroup: true,
+          message: message,
+        });
+        io.to(user.socketId).emit(
+          "new-message-side-bar",
+          messageUserGroupSender
+        );
+      }
+    });
+
+    if (type == 1) {
+      await GroupService.addManyUserToGroup({ groupId: cecipientGroupId, ids });
+      const users = await UserService.getInfoUserInIds(ids);
+      users.forEach(async (user) => {
+        const firstMessage = await MessageService.getFirstOfGroup({
+          groupId: cecipientGroupId,
+          userId: user._id.toString(),
+        });
+        if (user.isActive) {
+          io.to(user.socketId).emit("be-added-to-new-group", firstMessage);
+        }
+      });
+    } else if (type == 2) {
+      const users = await UserService.getInfoUserInIds(ids);
+      users.forEach(async (user) => {
+        if (user.isActive) {
+          io.to(user.socketId).emit("be-removed-from-group-chat-container", {
+            groupId: cecipientGroupId,
+          });
+          io.to(user.socketId).emit("be-removed-from-group-sidebar", {
+            groupId: cecipientGroupId,
+          });
+        }
+      });
+    } else {
+      socket.emit("be-removed-from-group-chat-container", {
+        groupId: cecipientGroupId,
+      });
+      socket.emit("be-removed-from-group-sidebar", {
+        groupId: cecipientGroupId,
+      });
+    }
+  };
+
   socket.on("call-to-group", callToGroup);
   socket.on("call-to-friend", callToFriend);
   socket.on("send-message-to-user", sendMessageToUser);
   socket.on("send-message-to-group", sendMessageToGroup);
+  socket.on("manage-group", manageGroup);
 };
