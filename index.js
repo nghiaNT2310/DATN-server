@@ -13,7 +13,7 @@ const groupHandler = require("./handler/groupHandler");
 const messageHandler = require("./handler/messageHandler");
 var fileupload = require("express-fileupload");
 
-var OPENVIDU_URL = process.env.OPENVIDU_URL || "http://localhost:4443";
+var OPENVIDU_URL = process.env.OPENVIDU_URL || "192.168.1.91:4443";
 // Environment variable: PORT where the node server is listening
 var SERVER_PORT = process.env.SERVER_PORT || 5000;
 // Enable CORS support
