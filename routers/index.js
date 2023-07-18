@@ -27,67 +27,67 @@ const OVController = require("../controllers/OVController");
 const FirebaseController = require("../controllers/firebaseController");
 const router = express.Router();
 
-router.get("/friend", getFriendId);
+router.get("/api/friend", getFriendId);
 
 router.post("/api/sessions", OVController.CreateSessionId);
 
 router.post("/api/sessions/:sessionId/connections", OVController.CreateSession);
 
-router.post("/signup", hashPassword, register);
+router.post("/api/signup", hashPassword, register);
 
-router.post("/signin", login);
+router.post("/api/signin", login);
 
-router.post("/group", authenticate, createNewGroup);
+router.post("/api/group", authenticate, createNewGroup);
 
-router.get("/info/friend/:id", getInfoFriend);
+router.get("/api/info/friend/:id", getInfoFriend);
 
-router.post("/usergroup", addUser); // will remove
+router.post("/api/usergroup", addUser); // will remove
 
-router.post("/friend", authenticate, addFriendController); // will remove
+router.post("/api/friend", authenticate, addFriendController); // will remove
 
-router.post("/message/group", messageController.sentMessageToGroup); //will remove
+router.post("/api/message/group", messageController.sentMessageToGroup); //will remove
 
-router.post("/message", messageController.sentMessageToUser); //will remove
+router.post("/api/message", messageController.sentMessageToUser); //will remove
 
-router.get("/message", authenticate, messageController.getMessage);
+router.get("/api/message", authenticate, messageController.getMessage);
 
-router.get("/test/:id", getFriends); //will delete
+router.get("/api/test/:id", getFriends); //will delete
 
 router.get(
-  "/message/friend/:id",
+  "/api/message/friend/:id",
   authenticate,
   messageController.getMessageByFriendId
 );
 
 router.get(
-  "/message/group/:id",
+  "/api/message/group/:id",
   authenticate,
   messageController.getMessageByGroupId
 );
 
-router.get("/user", authenticate, getInfo);
+router.get("/api/user", authenticate, getInfo);
 
-router.get("/explore", authenticate, exploreUser);
+router.get("/api/explore", authenticate, exploreUser);
 
 router.get(
-  "/notification",
+  "/api/notification",
   authenticate,
   notificationController.GetListNotification
 );
 
-router.get("/group-user/:groupId", authenticate, getListFriendNotInGroup);
+router.get("/api/group-user/:groupId", authenticate, getListFriendNotInGroup);
 
-router.post("/avatar", FirebaseController.uploadFile);
+router.post("/api/avatar", FirebaseController.uploadFile);
 
-router.get("/avatar", FirebaseController.getLinkDownload);
+router.get("/api/avatar", FirebaseController.getLinkDownload);
 
 router.get(
-  "/group/user/:id",
+  "/api/group/user/:id",
   authenticate,
   getListUserInGroupExceptOwnerRequest
 );
 
-router.get("/group/:id", getGroupInfo);
+router.get("/api/group/:id", getGroupInfo);
 
 router.use(handleError);
 
