@@ -46,6 +46,14 @@ const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "DELETE"],
   },
 });
+// const io = new Server({
+//   server: server,
+//   path: "/api/",
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//   },
+// });
 
 const onConnection = (socket) => {
   console.log(`User connected ${socket.id}`);
