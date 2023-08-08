@@ -89,6 +89,10 @@ router.get(
 
 router.get("/api/group/:id", getGroupInfo);
 
+router.get("/test/check", (req,res)=>{
+  res.send("ok")
+});
+
 router.use(handleError);
 
 module.exports = router;

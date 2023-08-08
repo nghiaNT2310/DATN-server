@@ -40,11 +40,18 @@ mongoService.connect();
 
 app.use(route);
 
-const io = new Server(server, {
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//   },
+// });
+const io = require("socket.io")(server, {
+  path: "/test/",
   cors: {
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  },
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+      },
 });
 // const io = new Server({
 //   server: server,

@@ -7,8 +7,8 @@ async function AddNotification({ sender, receiver, type, avatar }) {
   const userReceiver = await UserService.getInfoByUserId(receiver);
   const messageContent =
     type == 1
-      ? `${userSender.username} da gui loi moi ket ban den ban`
-      : `Ban da gui loi moi ket ban den ${userReceiver.username}`;
+      ? `${userSender.username} sent you a friend request`
+      : `You have sent a friend request to ${userReceiver.username}`;
   await Notification.create({
     sender,
     receiver,

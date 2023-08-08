@@ -8,7 +8,6 @@ var openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
 
 async function CreateSessionId(req, res) {
   var session = await openvidu.createSession(req.body);
-  console.log("aaa", req.body);
   res.send(session.sessionId);
 }
 
@@ -16,11 +15,11 @@ async function CreateSession(req, res) {
   var session = openvidu.activeSessions.find(
     (s) => s.sessionId === req.params.sessionId
   );
-  console.log("bbb", session);
   if (!session) {
     res.status(404).send();
   } else {
     var connection = await session.createConnection(req.body);
+    console.log("----token:---",connection.token);
     res.send(connection.token);
   }
 }
