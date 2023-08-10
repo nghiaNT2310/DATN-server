@@ -12,6 +12,7 @@ const friendHandler = require("./handler/friendHandler");
 const groupHandler = require("./handler/groupHandler");
 const messageHandler = require("./handler/messageHandler");
 var fileupload = require("express-fileupload");
+const jwt = require('jsonwebtoken');
 
 var OPENVIDU_URL = process.env.OPENVIDU_URL || "192.168.1.91:4443";
 // Environment variable: PORT where the node server is listening
@@ -70,7 +71,18 @@ const onConnection = (socket) => {
   messageHandler(io, socket);
 };
 
-io.on("connection", onConnection);
+io.use(function(socket, next){
+  if (socket.handshake.query && socket.handshake.query.token){
+    jwt.verify(socket.handshake.query.token, process.env.JWT_KEY, function(err, decoded) {
+      if (err) return next(new Error('Authentication error'));
+      socket.decoded = decoded;
+      next();
+    });
+  }
+  else {
+    next(new Error('Authentication error'));
+  }    
+}).on("connection", onConnection);
 
 // Serve application
 server.listen(SERVER_PORT, () => {
