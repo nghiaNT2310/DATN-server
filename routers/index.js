@@ -4,6 +4,7 @@ const {
   login,
   getInfo,
   getInfoFriend,
+  logoutController,
 } = require("../controllers/UserController");
 const {
   createNewGroup,
@@ -27,15 +28,19 @@ const OVController = require("../controllers/OVController");
 const FirebaseController = require("../controllers/firebaseController");
 const router = express.Router();
 
+
+
 router.get("/api/friend", getFriendId);
 
-router.post("/api/sessions", OVController.CreateSessionId);
+router.post("/api/sessions",authenticate, OVController.CreateSessionId);
 
-router.post("/api/sessions/:sessionId/connections", OVController.CreateSession);
+router.post("/api/sessions/:sessionId/connections",authenticate, OVController.CreateSession);
 
 router.post("/api/signup", hashPassword, register);
 
 router.post("/api/signin", login);
+
+router.get("/api/logout", authenticate,logoutController);
 
 router.post("/api/group", authenticate, createNewGroup);
 

@@ -11,7 +11,6 @@ module.exports = (io, socket) => {
       creator: data.creator,
       isActive: true,
     });
-    console.log(response);
 
     await GroupService.addUserToGroup({
       userId: data.creator,

@@ -102,6 +102,14 @@ async function setAvatar(id, url) {
   await User.findByIdAndUpdate(id, { avatar: url });
 }
 
+async function logout(id){
+  await User.findByIdAndUpdate(id, { isActive: false,socketId:"" });
+}
+
+async function activeUser(id){
+  await User.findByIdAndUpdate(id, { isActive: true });
+}
+
 module.exports = {
   createUser,
   findUserByUserName,
@@ -110,4 +118,6 @@ module.exports = {
   updateSocketId,
   getInfoUserInIds,
   setAvatar,
+  logout,
+  activeUser,
 };

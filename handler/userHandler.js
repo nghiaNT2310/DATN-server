@@ -7,7 +7,7 @@ module.exports = (io, socket) => {
     // lstId.forEach((e) => {
     //   socket.join(e);
     // });
-    console.log(userId);
+    //console.log(userId);
     await UserService.updateSocketId(userId, socket.id);
   };
 

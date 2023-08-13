@@ -14,10 +14,15 @@ const CODE_MESSAGE = {
     code: 404,
     message: "Requested resource does not exist",
   },
+  ACCOUNT_ISACTIVE:{
+    code:405,
+    message:"the account is logged in elsewhere"
+  },
   INTERNAL_SERVER_ERROR: {
     code: 500,
     message: "Internal Server Error",
   },
+
 };
 
 function respond(codeMessage, result) {

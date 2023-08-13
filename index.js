@@ -69,6 +69,9 @@ const onConnection = (socket) => {
   friendHandler(io, socket);
   groupHandler(io, socket);
   messageHandler(io, socket);
+  socket.on("disconnect", () => {
+    console.log(`${socket.id} disconnect`); // undefined
+  });
 };
 
 io.use(function(socket, next){

@@ -3,6 +3,8 @@ const {
   findUserByUserName,
   getInfoByUserId,
   setAvatar,
+  logout,
+  activeUser
 } = require("../services/UserService");
 const { handleError } = require("../services/handleErrorService");
 const { CODE_MESSAGE, respond } = require("../services/responseService");
@@ -36,6 +38,13 @@ async function login(req, res, next) {
       return res.send(respond(CODE_MESSAGE.WRONG_PASSWORD));
     }
 
+    // if(user.isActive){
+    //   return res.send(respond(CODE_MESSAGE.ACCOUNT_ISACTIVE))
+    // }
+
+    await activeUser(user._id)
+    
+
     var token = jwt.sign(
       {
         id: user._id,
@@ -60,4 +69,9 @@ async function getInfoFriend(req, res, next) {
   res.send(user);
 }
 
-module.exports = { register, login, getInfo, getInfoFriend };
+async function logoutController(req,res,next){
+  await logout(req.user.id);
+  res.send("ok")
+}
+
+module.exports = { register, login, getInfo, getInfoFriend,logoutController };
